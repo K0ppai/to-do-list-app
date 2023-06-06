@@ -20,25 +20,7 @@ module.exports = {
     rules: [
       {
         test: /\.css$/i,
-        use: [  {
-          loader: 'style-loader'
-        },
-        {
-          loader: 'css-loader'
-        },
-        {
-          loader: 'postcss-loader',
-          options: {
-            postcssOptions: {
-              plugins: () => [
-                require('autoprefixer')
-              ]
-            }
-          }
-        },
-        {
-          loader: 'sass-loader'
-        }],
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
