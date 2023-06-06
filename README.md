@@ -56,9 +56,7 @@
 
 ### Key Features <a name="key-features"></a>
 
-- **Use of medium-fidelity wireframe to build the UI.**
-- **Customized for both mobile and desktop devices.**
-- **Navigation and Animations**
+- **Use of webpack.**
 
 <!-- ![Screenshot](./images/Screenshot%202.png) -->
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
