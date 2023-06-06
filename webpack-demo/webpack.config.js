@@ -4,11 +4,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   mode: 'development',
   entry: {
-    main : path.resolve(__dirname, './src/index.js'),
+    main: path.resolve(__dirname, './src/index.js'),
   },
   devtool: 'inline-source-map',
   devServer: {
     static: './dist',
+    hot: true,
   },
   output: {
     filename: '[name].js',
