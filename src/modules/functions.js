@@ -25,7 +25,7 @@ const renderTasks = () => {
     inputCheck.className = 'task-checkbox';
     inputCheck.type = 'checkbox';
     inputCheck.id = `task${index}`;
-    inputLabel.className = 'px-3 label';
+    inputLabel.className = 'label ms-4 ps-3';
     inputLabel.id = `label${index}`;
     inputLabel.type = 'text';
     inputLabel.value = element.Name;
@@ -38,12 +38,16 @@ const renderTasks = () => {
     // text edit and change to delete icon
 
     const changeTrashIcon = (e) => {
-      if (e.target.tagName === 'INPUT') {
-        const parent = e.target.parentElement;
-        parent.lastChild.className = parent.lastChild.className.replace('fa-solid fa-ellipsis-vertical', 'fa-regular fa-trash-can');
-      }
+      const parent = e.target.parentElement;
+      parent.lastChild.className = parent.lastChild.className.replace('fa-solid fa-ellipsis-vertical', 'fa-regular fa-trash-can');
+      parent.style.backgroundColor = 'red';
+    };
+    const changeEllipsisIcon = (e) => {
+      const parent = e.target.parentElement;
+      parent.lastChild.className = parent.lastChild.className.replace('fa-regular fa-trash-can', 'fa-solid fa-ellipsis-vertical');
     };
     inputLabel.addEventListener('focus', changeTrashIcon);
+    inputLabel.addEventListener('blur', changeEllipsisIcon);
     inputLabel.addEventListener('input', (e) => {
       const parent = e.target.parentElement;
       const index = Array.prototype.indexOf.call(taskListParent.children, parent);
@@ -67,7 +71,7 @@ const renderTasks = () => {
         saveDataToLocalStorage(collection);
       }
     };
-    icon.addEventListener('click', deleteTask);
+    icon.addEventListener('mousedown', deleteTask);
 
     // check box function
     const checkComplete = (e) => {
