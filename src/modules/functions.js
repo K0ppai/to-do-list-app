@@ -7,7 +7,12 @@ const taskListParent = document.querySelector('.task-lists');
 const saveDataToLocalStorage = (data) => {
   localStorage.setItem('Tasks', JSON.stringify(data));
 };
-
+// Rest the index
+const updateIndex = (data) => {
+  data.forEach((element, index) => {
+    element.Index = index + 1;
+  });
+};
 // generate dynamically
 const renderTasks = () => {
   taskListParent.innerHTML = '';
@@ -50,12 +55,7 @@ const renderTasks = () => {
         }
       }
     });
-    // Rest the index
-    const updateIndex = (data) => {
-      data.forEach((element, index) => {
-        element.Index = index + 1;
-      });
-    };
+
     // delete task
     const deleteTask = (e) => {
       if (e.target.classList.contains('fa-trash-can')) {
@@ -68,6 +68,26 @@ const renderTasks = () => {
       }
     };
     icon.addEventListener('click', deleteTask);
+
+    // check box function
+    const checkComplete = (e) => {
+      const parent = e.target.parentElement;
+      const index = Array.prototype.indexOf.call(taskListParent.children, parent);
+      for (let i = 0; i < collection.length; i += 1) {
+        if (collection[i].Index - 1 === index) {
+          collection[i].Completed = !collection[i].Completed;
+        }
+      }
+      const label = parent.querySelector('.label');
+      const checkBox = parent.querySelector('.task-checkbox');
+      if (checkBox.checked) {
+        label.style.textDecoration = 'line-through';
+      } else {
+        label.style.textDecoration = 'none';
+      }
+      saveDataToLocalStorage(collection);
+    };
+    inputCheck.addEventListener('change', checkComplete);
   });
 };
 
@@ -92,3 +112,16 @@ input.addEventListener('keypress', addTask);
 
 export { renderTasks as default };
 saveDataToLocalStorage(collection);
+
+const clearBtn = document.querySelector('.clear');
+
+const clearAllCompleted = () => {
+  // console.log('click');
+  collection.forEach(() => {
+    collection = collection.filter((complete) => complete.Completed === false);
+    updateIndex(collection);
+    saveDataToLocalStorage(collection);
+    renderTasks();
+  });
+};
+clearBtn.addEventListener('click', clearAllCompleted);
