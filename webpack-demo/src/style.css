@@ -7,11 +7,13 @@
   max-width: 100vw;
 }
 
-.fa-solid,.fa-regular {
+.fa-solid,
+.fa-regular {
   color: grey;
 }
 
-input[type="text"],label {
+input[type="text"],
+label {
   border: none;
   outline: none;
   width: 85%;
@@ -27,16 +29,14 @@ input[type="text"]::placeholder {
   border: none;
 }
 
-.task-checkbox {
-  cursor: pointer;
-}
-
 .clear {
   color: #8e8e8e;
 }
 
 .fa-ellipsis-vertical,
-.clear {
+.clear,
+.task-checkbox,
+.fa-trash-can {
   cursor: pointer;
 }
 

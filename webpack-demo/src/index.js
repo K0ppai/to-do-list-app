@@ -1,71 +1,94 @@
 import './style.css';
-import Task, { collection } from './modules/task.js';
+import Task from './modules/task.js';
 
+let collection = JSON.parse(localStorage.getItem('Tasks')) || [];
 const input = document.getElementById('input');
-let i = 0;
 const taskListParent = document.querySelector('.task-lists');
 
 const saveDataToLocalStorage = (data) => {
   localStorage.setItem('Tasks', JSON.stringify(data));
 };
 
-const addTask = (e) => {
-  const taskHtml = `<div class="d-flex align-items-center py-3 px-3 border-bottom border-1 border-secondary-subtle">
-  <input type="checkbox" id="task${i}" class="task-checkbox">
-  <label class="px-3" contenteditable="true">${input.value}</label>
-  <i class="fa-solid fa-ellipsis-vertical ms-auto"></i>
-  </div>`;
-  if (e.key === 'Enter') {
-    taskListParent.innerHTML += taskHtml;
-    i += 1;
-    const task = new Task(input.value, i);
-    collection.push(task);
-    saveDataToLocalStorage(collection);
-  }
-};
-
-input.addEventListener('keypress', addTask);
-
+// generate dynamically
 const renderTasks = () => {
   taskListParent.innerHTML = '';
-  collection.forEach((element) => {
-    taskListParent.innerHTML += `<div class="d-flex align-items-center py-3 px-3 border-bottom border-1 border-secondary-subtle">
-    <input type="checkbox" id="task" class="task-checkbox">
-    <label class="px-3" id="label${element.Index}" contenteditable="true">${element.Name}</label>
-    <i class="fa-solid fa-ellipsis-vertical ms-auto"></i></div>`;
+  collection.forEach((element, index) => {
+    const div = document.createElement('div');
+    const inputCheck = document.createElement('input');
+    const inputLabel = document.createElement('input');
+    const icon = document.createElement('i');
+    div.className = 'd-flex align-items-center py-3 px-3 border-bottom border-1 border-secondary-subtle';
+    inputCheck.className = 'task-checkbox';
+    inputCheck.type = 'checkbox';
+    inputCheck.id = `task${index}`;
+    inputLabel.className = 'px-3 label';
+    inputLabel.id = `label${index}`;
+    inputLabel.type = 'text';
+    inputLabel.value = element.Name;
+    inputLabel.name = 'description';
+    icon.className = 'fa-solid fa-ellipsis-vertical ms-auto';
+
+    taskListParent.appendChild(div);
+    div.append(inputCheck, inputLabel, icon);
+
+    // text edit and change to delete icon
+
+    const changeTrashIcon = (e) => {
+      if (e.target.tagName === 'INPUT') {
+        const parent = e.target.parentElement;
+        parent.lastChild.className = parent.lastChild.className.replace('fa-solid fa-ellipsis-vertical', 'fa-regular fa-trash-can');
+      }
+    };
+    inputLabel.addEventListener('focus', changeTrashIcon);
+    inputLabel.addEventListener('input', (e) => {
+      const parent = e.target.parentElement;
+      const index = Array.prototype.indexOf.call(taskListParent.children, parent);
+      const updatedValue = inputLabel.value;
+      for (let j = 0; j < collection.length; j += 1) {
+        if (collection[j].Index - 1 === index) {
+          collection[j].Name = updatedValue;
+          saveDataToLocalStorage(collection);
+        }
+      }
+    });
+    // Rest the index
+    const updateIndex = (data) => {
+      data.forEach((element, index) => {
+        element.Index = index + 1;
+      });
+    };
+    // delete task
+    const deleteTask = (e) => {
+      if (e.target.classList.contains('fa-trash-can')) {
+        const parent = e.target.parentElement;
+        const index = Array.from(taskListParent.children).indexOf(parent) + 1;
+        collection = collection.filter((element) => element.Index !== index);
+        parent.remove();
+        updateIndex(collection);
+        saveDataToLocalStorage(collection);
+      }
+    };
+    icon.addEventListener('click', deleteTask);
   });
 };
 renderTasks();
+saveDataToLocalStorage(collection);
 
-const label = document.querySelectorAll('label');
-const editText = (e) => {
-  label.forEach((element) => {
-    if (e.target.id === element.id) {
-      const parent = e.target.parentElement;
-      parent.lastChild.className = parent.lastChild.className.replace('fa-solid fa-ellipsis-vertical', 'fa-regular fa-trash-can');
-    }
-  });
-};
-
-label.forEach((element) => {
-  element.addEventListener('click', editText);
-});
-
-const parentContainer = document.querySelector('.task-lists');
-const deleteBtn = document.querySelectorAll('i');
-const deleteTask = (e) => {
-  const classList = Array.from(e.target.classList);
-  if (classList.includes('fa-trash-can')) {
-    const parent = e.target.parentElement;
-    parent.remove();
-
-    saveDataToLocalStorage();
+// add task
+let i = 1;
+const addTask = (e) => {
+  const localData = JSON.parse(localStorage.getItem('Tasks'));
+  if (localData.length !== 0) {
+    i = localData.length;
+    i += 1;
   }
-  // console.log(e.target.classList);
-};
 
-deleteBtn.forEach((element) => {
-  element.addEventListener('click', deleteTask);
-  // console.log(element);
-});
-// console.log(label);
+  if (e.key === 'Enter' && input.value !== '') {
+    const task = new Task(input.value, i);
+    i += 1;
+    collection.push(task);
+    saveDataToLocalStorage(collection);
+    renderTasks();
+  }
+};
+input.addEventListener('keypress', addTask);
