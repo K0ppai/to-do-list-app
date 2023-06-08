@@ -25,7 +25,7 @@ const renderTasks = () => {
     inputCheck.className = 'task-checkbox';
     inputCheck.type = 'checkbox';
     inputCheck.id = `task${index}`;
-    inputLabel.className = 'label ms-4 px-3 py-1 rounded-2';
+    inputLabel.className = 'label ms-3 px-2 py-1 rounded-2';
     inputLabel.id = `label${index}`;
     inputLabel.type = 'text';
     inputLabel.value = element.Name;
