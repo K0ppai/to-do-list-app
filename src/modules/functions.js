@@ -1,5 +1,4 @@
-import './style.css';
-import Task from './modules/task.js';
+import Task from './task.js';
 
 let collection = JSON.parse(localStorage.getItem('Tasks')) || [];
 const input = document.getElementById('input');
@@ -71,8 +70,6 @@ const renderTasks = () => {
     icon.addEventListener('click', deleteTask);
   });
 };
-renderTasks();
-saveDataToLocalStorage(collection);
 
 // add task
 let i = 1;
@@ -92,3 +89,6 @@ const addTask = (e) => {
   }
 };
 input.addEventListener('keypress', addTask);
+
+export { renderTasks as default };
+saveDataToLocalStorage(collection);
