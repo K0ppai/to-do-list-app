@@ -21,11 +21,11 @@ const renderTasks = () => {
     const inputCheck = document.createElement('input');
     const inputLabel = document.createElement('input');
     const icon = document.createElement('i');
-    div.className = 'd-flex align-items-center py-3 px-3 border-bottom border-1 border-secondary-subtle';
+    div.className = 'd-flex align-items-center py-3 ps-4 pe-3 border-bottom border-1 border-secondary-subtle';
     inputCheck.className = 'task-checkbox';
     inputCheck.type = 'checkbox';
     inputCheck.id = `task${index}`;
-    inputLabel.className = 'label ms-4 ps-3';
+    inputLabel.className = 'label ms-4 px-3 py-1 rounded-2';
     inputLabel.id = `label${index}`;
     inputLabel.type = 'text';
     inputLabel.value = element.Name;
@@ -40,11 +40,14 @@ const renderTasks = () => {
     const changeTrashIcon = (e) => {
       const parent = e.target.parentElement;
       parent.lastChild.className = parent.lastChild.className.replace('fa-solid fa-ellipsis-vertical', 'fa-regular fa-trash-can');
-      parent.style.backgroundColor = 'red';
+      // parent.style.backgroundColor = 'red';
+      parent.classList.add('bg-warning');
     };
     const changeEllipsisIcon = (e) => {
       const parent = e.target.parentElement;
       parent.lastChild.className = parent.lastChild.className.replace('fa-regular fa-trash-can', 'fa-solid fa-ellipsis-vertical');
+      parent.style.backgroundColor = 'unset';
+      parent.classList.remove('bg-warning');
     };
     inputLabel.addEventListener('focus', changeTrashIcon);
     inputLabel.addEventListener('blur', changeEllipsisIcon);
