@@ -29,11 +29,6 @@ input[type="text"]::placeholder {
   border: none;
 }
 
-input[type="checkbox"] {
-  accent-color: #e9d045; 
-  mix-blend-mode: multiply;
-}
-
 .clear {
   color: #8e8e8e;
 }
