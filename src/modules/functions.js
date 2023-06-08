@@ -120,10 +120,10 @@ input.addEventListener('keypress', addTask);
 export { renderTasks as default };
 saveDataToLocalStorage(collection);
 
+// clear all function
 const clearBtn = document.querySelector('.clear');
 
 const clearAllCompleted = () => {
-  // console.log('click');
   collection.forEach(() => {
     collection = collection.filter((complete) => complete.Completed === false);
     updateIndex(collection);
