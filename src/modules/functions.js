@@ -113,7 +113,9 @@ const addTask = (e) => {
     collection.push(task);
     saveDataToLocalStorage(collection);
     renderTasks();
+    input.value = '';
   }
+  // input.reset();
 };
 input.addEventListener('keypress', addTask);
 
