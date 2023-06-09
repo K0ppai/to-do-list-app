@@ -12,8 +12,7 @@
   color: grey;
 }
 
-input[type="text"],
-label {
+input[type="text"] {
   border: none;
   outline: none;
   width: 90%;
@@ -36,11 +35,11 @@ input[type="text"]::placeholder {
 .fa-ellipsis-vertical,
 .clear,
 .task-checkbox,
-.fa-trash-can {
+.fa-trash-can,.fa-arrows-rotate {
   cursor: pointer;
 }
 
-.clear:hover {
+.clear:hover,.fa-arrows-rotate:hover {
   color: red;
   transition: 350ms;
 }
@@ -58,4 +57,10 @@ input[type="text"]::placeholder {
 .task-container {
   border: 1px solid #e9d045;
   box-shadow: 0 0 8px #e9d045;
+}
+
+@media screen and (max-width:768px) {
+  input[type="text"]{
+    width: 75vw;
+  }
 }

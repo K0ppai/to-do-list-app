@@ -31,6 +31,10 @@ const renderTasks = () => {
     inputLabel.value = element.Name;
     inputLabel.name = 'description';
     icon.className = 'fa-solid fa-ellipsis-vertical ms-auto';
+    if (element.Completed === true) {
+      inputLabel.style.textDecoration = 'line-through';
+      inputCheck.checked = true;
+    }
 
     taskListParent.appendChild(div);
     div.append(inputCheck, inputLabel, icon);
@@ -133,3 +137,11 @@ const clearAllCompleted = () => {
   });
 };
 clearBtn.addEventListener('click', clearAllCompleted);
+
+const resetBtn = document.querySelector('.fa-arrows-rotate');
+const reset = () => {
+  collection = [];
+  saveDataToLocalStorage(collection);
+  renderTasks();
+};
+resetBtn.addEventListener('click', reset);

@@ -31,7 +31,7 @@
 
 <!-- PROJECT DESCRIPTION -->
 
-# 📖 To Do List Project <a name="about-project"></a>
+# 📖 To Do List Project <a name="about-project" id="about-project"></a>
 
 ***To Do List Project*** is a simple app that you can use to list your daily tasks. 
 
@@ -63,7 +63,7 @@
 
 <!-- LIVE DEMO -->
 
-## 🚀 Live Demo <a name="live-demo"></a>
+## 🚀 Live Demo <a name="live-demo" id="live-demo"></a>
 
 - Click here for [live](https://k0ppai.github.io/to-do-list-app/dist) demo.
 
