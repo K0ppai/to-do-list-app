@@ -65,7 +65,7 @@
 
 ## 🚀 Live Demo <a name="live-demo"></a>
 
-- Click here for [live](https://k0ppai.github.io/to-do-list-app/dist/index.html) demo.
+- Click here for [live](https://k0ppai.github.io/to-do-list-app/dist) demo.
 
 <!-- - You can find the website [here](https://ochiengsteven.github.io/awesome-books/) -->
 
