@@ -115,7 +115,6 @@ const addTask = (e) => {
     renderTasks();
     input.value = '';
   }
-  // input.reset();
 };
 input.addEventListener('keypress', addTask);
 
