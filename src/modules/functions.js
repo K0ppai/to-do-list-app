@@ -7,12 +7,68 @@ const taskListParent = document.querySelector('.task-lists');
 const saveDataToLocalStorage = (data) => {
   localStorage.setItem('Tasks', JSON.stringify(data));
 };
-// Rest the index
+
 const updateIndex = (data) => {
   data.forEach((element, index) => {
     element.Index = index + 1;
   });
 };
+
+const changeTrashIcon = (event) => {
+  const parent = event.target.parentElement;
+  parent.lastChild.className = parent.lastChild.className.replace('fa-solid fa-ellipsis-vertical', 'fa-regular fa-trash-can');
+  parent.classList.add('bg-warning');
+};
+
+const changeEllipsisIcon = (event) => {
+  const parent = event.target.parentElement;
+  parent.lastChild.className = parent.lastChild.className.replace('fa-regular fa-trash-can', 'fa-solid fa-ellipsis-vertical');
+  parent.style.backgroundColor = 'unset';
+  parent.classList.remove('bg-warning');
+};
+
+const changeInput = (event) => {
+  const parent = event.target.parentElement;
+  const index = Array.prototype.indexOf.call(taskListParent.children, parent);
+  const label = parent.querySelector('.label');
+  const updatedValue = label.value;
+  for (let j = 0; j < collection.length; j += 1) {
+    if (collection[j].Index - 1 === index) {
+      collection[j].Name = updatedValue;
+      saveDataToLocalStorage(collection);
+    }
+  }
+};
+
+const deleteTask = (event) => {
+  if (event.target.classList.contains('fa-trash-can')) {
+    const parent = event.target.parentElement;
+    const index = Array.from(taskListParent.children).indexOf(parent) + 1;
+    collection = collection.filter((element) => element.Index !== index);
+    parent.remove();
+    updateIndex(collection);
+    saveDataToLocalStorage(collection);
+  }
+};
+
+const toggleCheck = (event) => {
+  const parent = event.target.parentElement;
+  const index = Array.prototype.indexOf.call(taskListParent.children, parent);
+  collection.forEach((element) => {
+    if (index === element.Index - 1) {
+      element.Completed = !element.Completed;
+    }
+  });
+  const label = parent.querySelector('.label');
+  const checkBox = parent.querySelector('.task-checkbox');
+  if (checkBox.checked) {
+    label.style.textDecoration = 'line-through';
+  } else {
+    label.style.textDecoration = 'none';
+  }
+  saveDataToLocalStorage(collection);
+};
+
 // generate dynamically
 const renderTasks = () => {
   taskListParent.innerHTML = '';
@@ -39,79 +95,23 @@ const renderTasks = () => {
     taskListParent.appendChild(div);
     div.append(inputCheck, inputLabel, icon);
 
-    // text edit and change to delete icon
-
-    const changeTrashIcon = (e) => {
-      const parent = e.target.parentElement;
-      parent.lastChild.className = parent.lastChild.className.replace('fa-solid fa-ellipsis-vertical', 'fa-regular fa-trash-can');
-      // parent.style.backgroundColor = 'red';
-      parent.classList.add('bg-warning');
-    };
-    const changeEllipsisIcon = (e) => {
-      const parent = e.target.parentElement;
-      parent.lastChild.className = parent.lastChild.className.replace('fa-regular fa-trash-can', 'fa-solid fa-ellipsis-vertical');
-      parent.style.backgroundColor = 'unset';
-      parent.classList.remove('bg-warning');
-    };
     inputLabel.addEventListener('focus', changeTrashIcon);
     inputLabel.addEventListener('blur', changeEllipsisIcon);
-    inputLabel.addEventListener('input', (e) => {
-      const parent = e.target.parentElement;
-      const index = Array.prototype.indexOf.call(taskListParent.children, parent);
-      const updatedValue = inputLabel.value;
-      for (let j = 0; j < collection.length; j += 1) {
-        if (collection[j].Index - 1 === index) {
-          collection[j].Name = updatedValue;
-          saveDataToLocalStorage(collection);
-        }
-      }
-    });
-
-    // delete task
-    const deleteTask = (e) => {
-      if (e.target.classList.contains('fa-trash-can')) {
-        const parent = e.target.parentElement;
-        const index = Array.from(taskListParent.children).indexOf(parent) + 1;
-        collection = collection.filter((element) => element.Index !== index);
-        parent.remove();
-        updateIndex(collection);
-        saveDataToLocalStorage(collection);
-      }
-    };
+    inputLabel.addEventListener('input', changeInput);
+    inputCheck.addEventListener('change', toggleCheck);
     icon.addEventListener('mousedown', deleteTask);
-
-    // check box function
-    const checkComplete = (e) => {
-      const parent = e.target.parentElement;
-      const index = Array.prototype.indexOf.call(taskListParent.children, parent);
-      for (let i = 0; i < collection.length; i += 1) {
-        if (collection[i].Index - 1 === index) {
-          collection[i].Completed = !collection[i].Completed;
-        }
-      }
-      const label = parent.querySelector('.label');
-      const checkBox = parent.querySelector('.task-checkbox');
-      if (checkBox.checked) {
-        label.style.textDecoration = 'line-through';
-      } else {
-        label.style.textDecoration = 'none';
-      }
-      saveDataToLocalStorage(collection);
-    };
-    inputCheck.addEventListener('change', checkComplete);
   });
 };
 
-// add task
 let i = 1;
-const addTask = (e) => {
+const addTask = (event) => {
   const localData = JSON.parse(localStorage.getItem('Tasks'));
   if (localData.length !== 0) {
     i = localData.length;
     i += 1;
   }
 
-  if (e.key === 'Enter' && input.value !== '') {
+  if (event.key === 'Enter' && input.value !== '') {
     const task = new Task(input.value, i);
     i += 1;
     collection.push(task);
@@ -122,12 +122,7 @@ const addTask = (e) => {
 };
 input.addEventListener('keypress', addTask);
 
-export { renderTasks as default };
-saveDataToLocalStorage(collection);
-
-// clear all function
 const clearBtn = document.querySelector('.clear');
-
 const clearAllCompleted = () => {
   collection.forEach(() => {
     collection = collection.filter((complete) => complete.Completed === false);
@@ -145,3 +140,6 @@ const reset = () => {
   renderTasks();
 };
 resetBtn.addEventListener('click', reset);
+
+export { renderTasks as default };
+saveDataToLocalStorage(collection);
